@@ -1,1 +1,60 @@
-<p>product-list works!</p>
+<div class="container mx-auto p-4">
+  <h1 class="text-2xl font-semibold mb-4">Lista de Productos</h1>
+
+  <!-- Search -->
+  <input type="text" class="w-full p-2 mb-4 rounded border" placeholder="Buscar por nombre" [(ngModel)]="searchQuery"
+    (input)="searchProducts()" />
+
+  <!-- Filter for price -->
+  <div class="md:flex">
+    <div class="md:w-1/2 ">
+
+      <label class="block font-semibold">Filtrar por precio:</label>
+      <div class="mb-4">
+        <input type="number" [(ngModel)]="minPrice" (change)="filterProducts()" placeholder="Precio mínimo"
+        class="w-24 p-2 rounded border">
+        <span class="mx-2">-</span>
+        <input type="number" [(ngModel)]="maxPrice" (change)="filterProducts()" placeholder="Precio máximo"
+        class="w-24 p-2 rounded border">
+      </div>
+    </div>
+
+    <!-- Filter for tags -->
+    <div class="mb-4 md:w-1/2">
+      <label class="block font-semibold">Filtrar por etiquetas:</label>
+      <div *ngFor="let tag of uniqueTags">
+        <label class="inline-block mr-2">
+          <input type="checkbox" [(ngModel)]="selectedTags" (change)="filterProducts()" [value]="tag"> {{ tag }}
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- products list -->
+  <ul>
+    <li *ngFor="let product of filteredProducts | slice: (currentPage - 1) * itemsPerPage : currentPage * itemsPerPage">
+      <div class="flex items-center border rounded p-2 mb-2 cursor-pointer">
+        <img [src]="product.image" alt="Imagen del producto" class="w-12 h-12 mr-4">
+        <div>
+          <h2 class="text-lg font-semibold">{{ product.name }}</h2>
+          <p class="text-gray-500">{{ product.sku }}</p>
+          <p class="text-green-500 font-semibold">${{ product.price }}</p>
+        </div>
+      </div>
+    </li>
+  </ul>
+
+
+  <!-- Pagination -->
+  <div class="mt-4 text-center">
+    <button class="bg-blue-500 text-white px-2 py-1 rounded cursor-pointer" [disabled]="currentPage === 1"
+      (click)="currentPage = currentPage - 1">
+      Anterior
+    </button>
+    <span class="mx-2">{{ currentPage }} de {{ totalPages }}</span>
+    <button class="bg-blue-500 text-white px-2 py-1 rounded cursor-pointer" [disabled]="currentPage === totalPages"
+      (click)="currentPage = currentPage + 1">
+      Siguiente
+    </button>
+  </div>
+</div>
