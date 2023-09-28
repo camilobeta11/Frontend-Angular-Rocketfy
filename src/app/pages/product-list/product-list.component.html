@@ -7,20 +7,19 @@
 
   <!-- Filter for price -->
   <div class="md:flex">
-    <div class="md:w-1/2 ">
-
+    <div class="md:w-1/3">
       <label class="block font-semibold">Filtrar por precio:</label>
       <div class="mb-4">
         <input type="number" [(ngModel)]="minPrice" (change)="filterProducts()" placeholder="Precio mínimo"
-        class="w-24 p-2 rounded border">
+          class="w-24 p-2 rounded border">
         <span class="mx-2">-</span>
         <input type="number" [(ngModel)]="maxPrice" (change)="filterProducts()" placeholder="Precio máximo"
-        class="w-24 p-2 rounded border">
+          class="w-24 p-2 rounded border">
       </div>
     </div>
 
     <!-- Filter for tags -->
-    <div class="mb-4 md:w-1/2">
+    <div class="mb-4 md:w-1/3">
       <label class="block font-semibold">Filtrar por etiquetas:</label>
       <div *ngFor="let tag of uniqueTags">
         <label class="inline-block mr-2">
@@ -28,13 +27,22 @@
         </label>
       </div>
     </div>
+
+    <!-- Create element -->
+    <div class="mb-4 md:w-1/3 flex justify-end items-end">
+      <button [routerLink]="['/products/create']" routerLinkActive="router-link-active"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ">
+        Crear
+      </button>
+    </div>
   </div>
 
   <!-- products list -->
   <ul>
     <li *ngFor="let product of filteredProducts | slice: (currentPage - 1) * itemsPerPage : currentPage * itemsPerPage">
       <div class="flex items-center border rounded p-2 mb-2 cursor-pointer">
-        <img [src]="product.image" alt="Imagen del producto" class="w-12 h-12 mr-4">
+        <img [src]="product.image" alt="Imagen del producto" class="w-12 h-12 mr-4"
+          onerror="this.onerror=null;this.src='../../../assets/icon/rocketfy.png'">
         <div>
           <h2 class="text-lg font-semibold">{{ product.name }}</h2>
           <p class="text-gray-500">{{ product.sku }}</p>
