@@ -4,6 +4,6 @@ Este proyecto fue generado con [Angular CLI](https://github.com/angular/angular-
 
 ## Correr servidor de desarrollo
 
-`ng serve -o` en la terminal para correr un servidor de desarrollo. Se abrera en tu navegador una pestaña con la siguiente url `http://localhost:4200/`.
+`ng serve -o` en la terminal para correr un servidor de desarrollo. Se abrirá en tu navegador una pestaña con la siguiente url `http://localhost:4200/`.
 
 
