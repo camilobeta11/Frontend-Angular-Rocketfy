@@ -1,11 +1,9 @@
-<div class="container mx-auto p-4">
-  <h1 class="text-2xl font-semibold mb-4">Lista de Productos</h1>
+<div class="container mx-auto mt-6 p-4">
 
-  <!-- Search -->
+  <h1 class="text-2xl font-semibold mb-4">Lista de Productos</h1>
   <input type="text" class="w-full p-2 mb-4 rounded border" placeholder="Buscar por nombre" [(ngModel)]="searchQuery"
     (input)="searchProducts()" />
 
-  <!-- Filter for price -->
   <div class="md:flex">
     <div class="md:w-1/3">
       <label class="block font-semibold">Filtrar por precio:</label>
@@ -18,7 +16,6 @@
       </div>
     </div>
 
-    <!-- Filter for tags -->
     <div class="mb-4 md:w-1/3">
       <label class="block font-semibold">Filtrar por etiquetas:</label>
       <div *ngFor="let tag of uniqueTags">
@@ -28,7 +25,6 @@
       </div>
     </div>
 
-    <!-- Create element -->
     <div class="mb-4 md:w-1/3 flex justify-end items-end">
       <button [routerLink]="['/products/create']" routerLinkActive="router-link-active"
         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ">
@@ -37,10 +33,8 @@
     </div>
   </div>
 
-  <!-- products list -->
   <ul>
-    <li
-      *ngFor="let product of filteredProducts | slice: (currentPage - 1) * itemsPerPage : currentPage * itemsPerPage; let i = index">
+    <li *ngFor="let product of products; let i = index">
       <div class="flex items-center border rounded p-2 mb-2 cursor-pointer" (click)="productDetail(product)">
         <img [src]="product.image" alt="Imagen del producto" class="w-12 h-12 mr-4"
           onerror="this.onerror=null;this.src='../../../assets/icon/rocketfy.png'">
@@ -53,17 +47,14 @@
     </li>
   </ul>
 
-
-  <!-- Pagination -->
   <div class="mt-4 text-center">
-    <button class="bg-blue-500 text-white px-2 py-1 rounded cursor-pointer" [disabled]="currentPage === 1"
-      (click)="currentPage = currentPage - 1">
+    <button *ngIf="currentPage != 1" class="bg-blue-500 text-white px-2 py-1 rounded cursor-pointer" [disabled]="currentPage === 1"
+      (click)="currentPage = currentPage - 1 ; onPageChange(currentPage)">
       Anterior
     </button>
     <span class="mx-2">{{ currentPage }} de {{ totalPages }}</span>
-    <button class="bg-blue-500 text-white px-2 py-1 rounded cursor-pointer" [disabled]="currentPage === totalPages"
-      (click)="currentPage = currentPage + 1">
+    <button *ngIf="currentPage != totalPages" class="bg-blue-500 text-white px-2 py-1 rounded cursor-pointer" [disabled]="currentPage === totalPages"
+      (click)="currentPage = currentPage + 1 ; onPageChange(currentPage)">
       Siguiente
     </button>
   </div>
-</div>

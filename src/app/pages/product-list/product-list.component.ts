@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { Subject, catchError, takeUntil, throwError } from 'rxjs';
 
 import { IProduct } from 'src/app/interfaces/product.interface';
@@ -17,17 +16,19 @@ export class ProductListComponent {
   products: IProduct[] = [];
   filteredProducts: IProduct[] = [];
   currentPage = 1;
-  itemsPerPage = 10;
-  searchQuery = '';
-
+  itemsPerPage = 5;
+  totalPages = 0;
+  pageNumbers: number[] = [];
+  searchQuery!: string;
   minPrice = 0;
   maxPrice = 1000;
   selectedTags: string[] = [];
-  uniqueTags: string[] = ['mobile'];
+  uniqueTags: string[] = [];
 
   constructor(
     private productService: ProductService,
-    private router: Router) { }
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.loadProducts();
@@ -40,8 +41,9 @@ export class ProductListComponent {
       this.unsubscribe$.next();
     }
   }
+
   loadProducts() {
-    this.productService.getProducts()
+    this.productService.getProducts(this.currentPage, this.itemsPerPage)
       .pipe(
         takeUntil(this.unsubscribe$),
         catchError((error) => {
@@ -49,20 +51,40 @@ export class ProductListComponent {
           return throwError('Error al cargar productos. Intente nuevamente más tarde.');
         })
       )
-      .subscribe((data) => {
-        this.products = data;
-        this.searchProducts();
+      .subscribe((data: any) => {
+        this.products = data.products;
+        this.currentPage = data.currentPage;
+        this.totalPages = data.totalPages;
+        this.calculateUniqueTags();
+        this.updatePageNumbers();
       });
   }
+
   searchProducts() {
-    this.filteredProducts = this.products.filter((product) =>
-      product.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-    );
+    const params: any = {};
+
+    if (this.searchQuery) {
+      params.name = this.searchQuery;
+    }
+
+    if(this.searchQuery.length === 0) {
+      console.log(this.searchQuery)
+      this.loadProducts()
+    }
+    this.productService.searchProducts(params).subscribe((data: any) => {
+      this.products = data;
+    });
+  }
+  updatePageNumbers() {
+    this.pageNumbers = [];
+    for (let i = 1; i <= this.totalPages; i++) {
+      this.pageNumbers.push(i);
+    }
   }
 
-
-  get totalPages(): number {
-    return Math.ceil(this.filteredProducts.length / this.itemsPerPage);
+  onPageChange(page: number) {
+    this.currentPage = page;
+    this.loadProducts();
   }
 
   filterProducts() {
@@ -83,10 +105,19 @@ export class ProductListComponent {
       allTags.push(...product.tags);
     });
 
-    // this.uniqueTags = Array.from(new Set(allTags)).sort();
+    this.uniqueTags = Array.from(new Set(allTags)).sort();
   }
 
   productDetail(i: IProduct) {
     this.router.navigateByUrl(`/products/${i._id}`);
+  }
+
+  toggleTag(tag: string) {
+    if (this.selectedTags.includes(tag)) {
+      this.selectedTags = this.selectedTags.filter((selectedTag) => selectedTag !== tag);
+    } else {
+      this.selectedTags.push(tag);
+    }
+    this.filterProducts();
   }
 }

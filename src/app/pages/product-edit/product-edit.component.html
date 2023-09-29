@@ -20,7 +20,7 @@
     <label for="image" class="block text-gray-700 font-bold mb-2">Imagen (URL):</label>
     <input type="text" id="image" formControlName="image" required class="w-full p-2 border rounded">
     <img *ngIf="productForm.get('image')?.value" [src]="productForm.get('image')?.value"
-      onerror="this.onerror=null;this.src='../../../assets/icon/error-image.svg'" [alt]="productForm.get('name')?.value"
+      onerror="this.onerror=null;this.src='../../../assets/icon/rocketfy.png'" [alt]="productForm.get('name')?.value"
       class="my-4 w-full rounded-lg">
   </div>
   <div class="mb-4">
