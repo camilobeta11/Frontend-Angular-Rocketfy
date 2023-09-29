@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
-import { catchError, throwError } from 'rxjs';
+import { Subject, catchError, takeUntil, throwError } from 'rxjs';
 
 import { IProduct } from 'src/app/interfaces/product.interface';
 import { ProductService } from 'src/app/services/product.service';
@@ -12,6 +13,7 @@ import { ProductService } from 'src/app/services/product.service';
 })
 export class ProductListComponent {
 
+  unsubscribe$: Subject<void> = new Subject<void>();
   products: IProduct[] = [];
   filteredProducts: IProduct[] = [];
   currentPage = 1;
@@ -23,16 +25,25 @@ export class ProductListComponent {
   selectedTags: string[] = [];
   uniqueTags: string[] = ['mobile'];
 
-  constructor(private productService: ProductService) { }
+  constructor(
+    private productService: ProductService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.loadProducts();
     this.calculateUniqueTags();
   }
 
+  ngOnDestroy() {
+    if (this.unsubscribe$) {
+      this.unsubscribe$.complete();
+      this.unsubscribe$.next();
+    }
+  }
   loadProducts() {
     this.productService.getProducts()
       .pipe(
+        takeUntil(this.unsubscribe$),
         catchError((error) => {
           console.error('Error al cargar productos:', error);
           return throwError('Error al cargar productos. Intente nuevamente más tarde.');
@@ -73,5 +84,9 @@ export class ProductListComponent {
     });
 
     // this.uniqueTags = Array.from(new Set(allTags)).sort();
+  }
+
+  productDetail(i: IProduct) {
+    this.router.navigateByUrl(`/products/${i._id}`);
   }
 }

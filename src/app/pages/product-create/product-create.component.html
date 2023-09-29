@@ -1,8 +1,7 @@
 <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="max-w-md mx-auto mt-6 p-4 bg-white rounded shadow-md">
 
   <div class="flex items-center justify-between my-4">
-    <button type="button" [routerLink]="['/products']" routerLinkActive="router-link-active"
-      class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700">Volver</button>
+    <a [routerLink]="['/products']" class="text-blue-500 hover:underline mt-2 block">Volver</a>
   </div>
 
   <div class="mb-4">

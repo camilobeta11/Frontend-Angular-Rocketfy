@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
+import { Subject, takeUntil } from 'rxjs';
+
 import { IProduct } from 'src/app/interfaces/product.interface';
 import { ProductService } from 'src/app/services/product.service';
 
@@ -12,6 +14,7 @@ import { ProductService } from 'src/app/services/product.service';
 })
 export class ProductCreateComponent {
 
+  unsubscribe$: Subject<void> = new Subject<void>();
   productForm!: FormGroup;
   tags: string[] = [];
   tag!: string;
@@ -23,6 +26,13 @@ export class ProductCreateComponent {
 
   ngOnInit(): void {
     this.createForm();
+  }
+
+  ngOnDestroy() {
+    if (this.unsubscribe$) {
+      this.unsubscribe$.complete();
+      this.unsubscribe$.next();
+    }
   }
 
   createForm() {
@@ -49,7 +59,9 @@ export class ProductCreateComponent {
     if (this.productForm.valid) {
       this.productForm.get('tags')?.setValue(this.tags);
       const newProduct: IProduct = this.productForm.value;
-      this.productService.createProduct(newProduct).subscribe(() => {
+      this.productService.createProduct(newProduct).pipe(
+        takeUntil(this.unsubscribe$))
+      .subscribe(() => {
         this.router.navigate(['/products']);
       });
     }

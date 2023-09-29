@@ -39,8 +39,9 @@
 
   <!-- products list -->
   <ul>
-    <li *ngFor="let product of filteredProducts | slice: (currentPage - 1) * itemsPerPage : currentPage * itemsPerPage">
-      <div class="flex items-center border rounded p-2 mb-2 cursor-pointer">
+    <li
+      *ngFor="let product of filteredProducts | slice: (currentPage - 1) * itemsPerPage : currentPage * itemsPerPage; let i = index">
+      <div class="flex items-center border rounded p-2 mb-2 cursor-pointer" (click)="productDetail(product)">
         <img [src]="product.image" alt="Imagen del producto" class="w-12 h-12 mr-4"
           onerror="this.onerror=null;this.src='../../../assets/icon/rocketfy.png'">
         <div>
