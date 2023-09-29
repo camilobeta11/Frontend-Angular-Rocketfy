@@ -1,6 +1,6 @@
 # Frontend Angular Rocketfy
 
-Este proyecto fue generado con [Angular CLI](https://github.com/angular/angular-cli) version 15.1.4 y el framework de CSS Tailwind para los estilos.
+Este proyecto fue generado con [Angular CLI](https://github.com/angular/angular-cli) version 15.1.4 y el framework de CSS [Tailwind](https://tailwindcss.com/) para los estilos.
 
 ## Correr servidor de desarrollo
 
