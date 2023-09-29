@@ -9,13 +9,15 @@ import { ProductListComponent } from './pages/product-list/product-list.componen
 import { ProductCreateComponent } from './pages/product-create/product-create.component';
 import { ProductDetailComponent } from './pages/product-detail/product-detail.component';
 import { ComponentsModule } from './components/components.module';
+import { ProductEditComponent } from './pages/product-edit/product-edit.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ProductListComponent,
     ProductCreateComponent,
-    ProductDetailComponent
+    ProductDetailComponent,
+    ProductEditComponent
   ],
   imports: [
     BrowserModule,

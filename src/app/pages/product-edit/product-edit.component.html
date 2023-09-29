@@ -19,6 +19,9 @@
   <div class="mb-4">
     <label for="image" class="block text-gray-700 font-bold mb-2">Imagen (URL):</label>
     <input type="text" id="image" formControlName="image" required class="w-full p-2 border rounded">
+    <img *ngIf="productForm.get('image')?.value" [src]="productForm.get('image')?.value"
+      onerror="this.onerror=null;this.src='../../../assets/icon/error-image.svg'" [alt]="productForm.get('name')?.value"
+      class="my-4 w-full rounded-lg">
   </div>
   <div class="mb-4">
     <label for="price" class="block text-gray-700 font-bold mb-2">Precio:</label>
@@ -59,6 +62,6 @@
 
   <div class="flex items-center justify-center">
     <button [ngClass]="{'bg-gray-200': !productForm.valid}" type="submit"
-      class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700">Crear</button>
+      class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700">Actualizar</button>
   </div>
 </form>

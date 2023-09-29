@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Subject, takeUntil } from 'rxjs';
@@ -11,7 +11,10 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./modal-delete.component.scss']
 })
 export class ModalDeleteComponent {
+
   @Input() id!: string;
+  @Output() backModalDelete = new EventEmitter();
+
   unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(
@@ -33,6 +36,9 @@ export class ModalDeleteComponent {
         .subscribe(() => {
           this.router.navigate(['/products']);
         });
+    }
+    if(!confirmation) {
+      this.backModalDelete.emit(false);
     }
   }
 

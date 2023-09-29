@@ -51,4 +51,8 @@ export class ProductDetailComponent {
     this.id = id;
     this.viewModaldelete = true;
   }
+
+  backModalDelete(event: any) {
+    this.viewModaldelete = event;
+  }
 }

@@ -1,4 +1,4 @@
-<app-modal-delete *ngIf="viewModaldelete" [id]="id"></app-modal-delete>
+<app-modal-delete *ngIf="viewModaldelete" [id]="id" (backModalDelete)="backModalDelete($event)"></app-modal-delete>
 
 <div *ngIf="product" class="max-w-md mx-auto mt-6 p-4 bg-white rounded shadow-md">
   <div class="flex items-center justify-between my-4">

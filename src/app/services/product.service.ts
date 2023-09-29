@@ -11,9 +11,9 @@ import { IProduct } from '../interfaces/product.interface';
 })
 export class ProductService {
 
-  private apiUrl =  environment.url;
+  private apiUrl = environment.url;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getProducts(): Observable<IProduct[]> {
     return this.http.get<IProduct[]>(`${this.apiUrl}/products`);
@@ -28,8 +28,8 @@ export class ProductService {
     return this.http.post<IProduct>(`${this.apiUrl}/products`, product);
   }
 
-  updateProduct(product: IProduct): Observable<IProduct> {
-    const url = `${this.apiUrl}/products/${product._id}`;
+  updateProduct(product: IProduct, id: string): Observable<IProduct> {
+    const url = `${this.apiUrl}/products/${id}`;
     return this.http.put<IProduct>(url, product);
   }
 
