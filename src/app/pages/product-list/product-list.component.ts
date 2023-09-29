@@ -20,9 +20,8 @@ export class ProductListComponent {
   totalPages = 0;
   pageNumbers: number[] = [];
   searchQuery!: string;
-  minPrice = 0;
-  maxPrice = 1000;
-  selectedTags: string[] = [];
+  stock! : number;
+  selectedTags: string = 'all';
   uniqueTags: string[] = [];
 
   constructor(
@@ -60,20 +59,40 @@ export class ProductListComponent {
       });
   }
 
-  searchProducts() {
+  searchProducts(param?: string) {
     const params: any = {};
 
-    if (this.searchQuery) {
-      params.name = this.searchQuery;
+    if (param === 'name') {
+      if (this.searchQuery) {
+        params.name = this.searchQuery;
+      }
+
+      if (this.searchQuery.length === 0) {
+        this.loadProducts()
+      }
+    }
+    if (param === 'tags') {
+      if (this.selectedTags) {
+        params.tags = this.selectedTags;
+      }
+
+      if (this.selectedTags == 'all') {
+        this.loadProducts();
+      }
     }
 
-    if(this.searchQuery.length === 0) {
-      console.log(this.searchQuery)
-      this.loadProducts()
+    if (param === 'stock') {
+      if (this.stock) {
+        params.stock = this.stock;
+      }
     }
-    this.productService.searchProducts(params).subscribe((data: any) => {
-      this.products = data;
-    });
+
+    this.productService.searchProducts(params)
+      .pipe(
+        takeUntil(this.unsubscribe$))
+      .subscribe((data: any) => {
+        this.products = data;
+      });
   }
   updatePageNumbers() {
     this.pageNumbers = [];
@@ -85,17 +104,6 @@ export class ProductListComponent {
   onPageChange(page: number) {
     this.currentPage = page;
     this.loadProducts();
-  }
-
-  filterProducts() {
-    this.filteredProducts = this.filteredProducts.filter((product) =>
-      product.price >= this.minPrice && product.price <= this.maxPrice
-    );
-    if (this.selectedTags.length > 0) {
-      this.filteredProducts = this.filteredProducts.filter((product) =>
-        product.tags.some((tag) => this.selectedTags.includes(tag))
-      );
-    }
   }
 
   calculateUniqueTags() {
@@ -112,12 +120,4 @@ export class ProductListComponent {
     this.router.navigateByUrl(`/products/${i._id}`);
   }
 
-  toggleTag(tag: string) {
-    if (this.selectedTags.includes(tag)) {
-      this.selectedTags = this.selectedTags.filter((selectedTag) => selectedTag !== tag);
-    } else {
-      this.selectedTags.push(tag);
-    }
-    this.filterProducts();
-  }
 }
